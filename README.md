@@ -33,6 +33,39 @@ Instead of answering solely from a language model's general knowledge, technoAss
 - **Safe fallback behavior:** Requests clarification for vague reports and indicates when the KB is insufficient.
 - **Evaluation:** DeepEval metrics and behavioral test cases for answer quality and unsupported scenarios.
 
+
+
+## 📸 Application Screenshots
+
+### Main Dashboard
+
+The Streamlit interface allows support engineers to
+describe technical issues in natural language.
+
+![technoAssistant Dashboard](screenshots/dashboard.png)
+
+### AI-Powered Troubleshooting
+
+Structured troubleshooting guidance with possible causes,
+diagnostic checks, conditional resolutions, and escalation.
+
+![Troubleshooting Response](screenshots/successful troubleshooting.png)
+
+### Multi-Issue Handling
+
+The assistant processes multiple technical issues
+independently and identifies unsupported requests.
+
+![Multi-Issue Troubleshooting](screenshots/multi-issue handling.png)
+
+### Knowledge Base References
+
+Each supported response includes references to the
+knowledge-base entries used to generate the answer.
+
+![Knowledge Base Sources](screenshots/light mode.png)
+
+
 ## 🧠 Architecture
 
 ```mermaid
