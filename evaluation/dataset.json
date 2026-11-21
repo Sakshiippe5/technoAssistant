@@ -1,0 +1,45 @@
+
+[
+    {
+        "id": "EVAL-001",
+        "input": "Payment API is returning HTTP 500",
+        "expected_output": "Possible causes include application exceptions and dependency failures. Review correlated application logs and check database and payment gateway health. Restore a confirmed failed dependency or route application defects to developers. Escalate to Backend/API if initial checks fail to isolate the cause or remediation requires privileged access or an approved change. Follow incident policy for significant customer impact.",
+        "expected_source_ids": ["KB-001"],
+        "expected_status": "supported"
+    },
+    {
+        "id": "EVAL-002",
+        "input": "Payment transactions are failing with an internal server error",
+        "expected_output": "Review correlated application logs and verify database and payment gateway health. Possible causes include application exceptions or dependency failures. Restore a confirmed failed dependency or route application defects to developers. Escalate to Backend/API when the cause cannot be isolated.",
+        "expected_source_ids": ["KB-001"],
+        "expected_status": "supported"
+    },
+    {
+        "id": "EVAL-003",
+        "input": "The payment service is responding with HTTP status 500",
+        "expected_output": "Investigate application exceptions and dependency failures. Review application logs and check database and payment gateway health. Restore confirmed failed dependencies or route application defects to developers. Escalate to Backend/API when necessary.",
+        "expected_source_ids": ["KB-001"],
+        "expected_status": "supported"
+    },
+    {
+        "id": "EVAL-004",
+        "input": "HTTP 505",
+        "expected_output": "The knowledge base does not contain sufficient information to troubleshoot this issue.",
+        "expected_source_ids": [],
+        "expected_status": "insufficient_context"
+    },
+    {
+        "id": "EVAL-005",
+        "input": "Something is not working",
+        "expected_output": "Request clarification about the affected service, symptoms or error code.",
+        "expected_source_ids": [],
+        "expected_status": "clarification_required"
+    },
+    {
+        "id": "EVAL-006",
+        "input": "Payment API HTTP 500 and HTTP 505",
+        "expected_output": "Provide knowledge-base-backed troubleshooting guidance for Payment API HTTP 500 and indicate insufficient information for HTTP 505.",
+        "expected_source_ids": ["KB-001"],
+        "expected_status": "partially_supported"
+    }
+]
