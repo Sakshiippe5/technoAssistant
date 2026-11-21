@@ -49,21 +49,21 @@ describe technical issues in natural language.
 Structured troubleshooting guidance with possible causes,
 diagnostic checks, conditional resolutions, and escalation.
 
-![Troubleshooting Response](screenshots/successful troubleshooting.png)
+![Troubleshooting Response](screenshots/successful_troubleshooting.png)
 
 ### Multi-Issue Handling
 
 The assistant processes multiple technical issues
 independently and identifies unsupported requests.
 
-![Multi-Issue Troubleshooting](screenshots/multi-issue handling.png)
+![Multi-Issue Troubleshooting](screenshots/multi-issue_handling.png)
 
 ### Knowledge Base References
 
 Each supported response includes references to the
 knowledge-base entries used to generate the answer.
 
-![Knowledge Base Sources](screenshots/light mode.png)
+![Knowledge Base Sources](screenshots/light_mode.png)
 
 
 ## 🧠 Architecture
