@@ -1,0 +1,132 @@
+
+name: technoAssistant CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+
+  # ---------------------------
+  # JOB 1: Python validation
+  # ---------------------------
+
+  validate:
+    name: Validate Python Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check Python syntax
+        run: |
+          python -m compileall -q \
+            backend frontend scripts evaluation
+
+      - name: Validate knowledge base
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          path = Path("data/knowledge_base.csv")
+
+          assert path.exists(), "Knowledge base missing"
+
+          with path.open(encoding="utf-8-sig", newline="") as f:
+              rows = list(csv.DictReader(f))
+
+          assert rows, "Knowledge base is empty"
+
+          required = {
+              "id",
+              "title",
+              "category",
+              "symptoms",
+              "diagnostic_checks",
+              "known_resolutions",
+              "escalation_team"
+          }
+
+          assert required.issubset(rows[0]), (
+              "Required knowledge base columns missing"
+          )
+
+          ids = [row["id"] for row in rows]
+
+          assert len(ids) == len(set(ids)), (
+              "Duplicate knowledge base IDs"
+          )
+
+          print(f"Validated {len(rows)} KB entries")
+          PY
+
+  # ---------------------------
+  # JOB 2: Docker build/publish
+  # ---------------------------
+
+  docker:
+    name: Docker - ${{ matrix.service }}
+    needs: validate
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: backend
+            dockerfile: Dockerfile.backend
+          - service: frontend
+            dockerfile: Dockerfile.frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Prepare image name
+        id: image
+        shell: bash
+        run: |
+          REPO="${GITHUB_REPOSITORY,,}"
+          echo "name=ghcr.io/${REPO}-${{ matrix.service }}" \
+            >> "$GITHUB_OUTPUT"
+
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and optionally publish image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./${{ matrix.dockerfile }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ steps.image.outputs.name }}:latest
+            ${{ steps.image.outputs.name }}:sha-${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
